@@ -52,12 +52,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer(const Duration(seconds: 1), () {
-      final now = DateTime.now();
-      setState(() {
-        _strDate = toChineseDateStr(now);
-        _strTime = toTimeStr(now);
-      });
+    _timer = Timer(const Duration(seconds: 1), updateDatetime);
+    updateDatetime();
+  }
+
+  updateDatetime() {
+    final now = DateTime.now();
+    setState(() {
+      _strDate = toChineseDateStr(now);
+      _strTime = toTimeStr(now);
     });
   }
 

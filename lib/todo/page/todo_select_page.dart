@@ -7,7 +7,11 @@ class TodoSelectPage extends StatelessWidget {
   const TodoSelectPage({super.key});
 
   onAddTodoClick(BuildContext context) {
-    Navigator.pushNamed(context, kRouteTodoAdd);
+    Navigator.pushNamed(context, kRouteTodoAdd).then((todoId) {
+      if (todoId != null) {
+        Navigator.pop(context, todoId);
+      }
+    });
   }
 
   @override
