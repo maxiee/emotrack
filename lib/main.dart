@@ -49,6 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
   String _strDate = '';
   String _strTime = '';
 
+  TodoData? mustDoTodo;
+  TodoData? goodTingTodo;
+
   @override
   void initState() {
     super.initState();
@@ -70,12 +73,22 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  onMustDoClicked() {
-    Navigator.pushNamed(context, kRouteTodoSelect);
+  onMustDoClicked() async {
+    final ret = await Navigator.pushNamed(context, kRouteTodoSelect);
+    if (ret == null) return;
+    final todo = await GetIt.I.get<AppDatabase>().getSingleTodo(ret as int);
+    setState(() {
+      mustDoTodo = todo;
+    });
   }
 
-  onGoodThingClicked() {
-    Navigator.pushNamed(context, kRouteTodoSelect);
+  onGoodThingClicked() async {
+    final ret = await Navigator.pushNamed(context, kRouteTodoSelect);
+    if (ret == null) return;
+    final todo = await GetIt.I.get<AppDatabase>().getSingleTodo(ret as int);
+    setState(() {
+      goodTingTodo = todo;
+    });
   }
 
   @override
@@ -94,10 +107,31 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(_strTime),
             const SizedBox(height: 60),
             const Text('必做之事'),
-            TextButton(onPressed: onMustDoClicked, child: const Text('选择')),
+            mustDoTodo == null
+                ? TextButton(
+                    onPressed: onMustDoClicked, child: const Text('选择'))
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(mustDoTodo!.title),
+                      TextButton(
+                          onPressed: onMustDoClicked, child: const Text('更换'))
+                    ],
+                  ),
             const SizedBox(height: 48),
             const Text('美好之事'),
-            TextButton(onPressed: onGoodThingClicked, child: const Text('选择')),
+            goodTingTodo == null
+                ? TextButton(
+                    onPressed: onGoodThingClicked, child: const Text('选择'))
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 12),
+                      Text(goodTingTodo!.title),
+                      TextButton(
+                          onPressed: onMustDoClicked, child: const Text('更换'))
+                    ],
+                  ),
             const SizedBox(height: 48),
             ElevatedButton(onPressed: () => null, child: const Text('待做事项'))
           ],

@@ -15,6 +15,9 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 1;
 
+  Future<TodoData> getSingleTodo(int id) =>
+      (select(todo)..where((t) => t.id.equals(id))).getSingle();
+
   Future<List<TodoData>> get allTodoItems => select(todo).get();
 
   Future<int> createOrUpdateTodo(TodoCompanion todoDate) {

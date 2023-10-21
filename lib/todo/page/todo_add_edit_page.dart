@@ -49,8 +49,8 @@ class _TodoAddEditPageState extends State<TodoAddEditPage> {
   onAddNewTodo(Map<String, dynamic> value) {
     final todoData = TodoCompanion.insert(
         title: value[kTitle] ?? '',
-        content: value[kContent] ?? '',
-        finish: value[kFinish] ?? false);
+        content: drift.Value(value[kContent] ?? ''),
+        finish: drift.Value(value[kFinish] ?? false));
     GetIt.I
         .get<AppDatabase>()
         .createOrUpdateTodo(todoData)
