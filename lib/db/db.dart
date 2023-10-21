@@ -14,6 +14,8 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  Future<List<TodoData>> get allTodoItems => select(todo).get();
 }
 
 LazyDatabase _openConnection() {

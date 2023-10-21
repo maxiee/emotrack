@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:emotrack/constants.dart';
 import 'package:emotrack/db/db.dart';
+import 'package:emotrack/todo/page/todo_select_page.dart';
 import 'package:emotrack/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
+      routes: {kRouteTodoSelect: (context) => const TodoSelectPage()},
       home: const MyHomePage(),
     );
   }
@@ -61,6 +63,14 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
+  onMustDoClicked() {
+    Navigator.pushNamed(context, kRouteTodoSelect);
+  }
+
+  onGoodThingClicked() {
+    Navigator.pushNamed(context, kRouteTodoSelect);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,10 +87,10 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(_strTime),
             const SizedBox(height: 60),
             const Text('必做之事'),
-            TextButton(onPressed: () => null, child: const Text('选择')),
+            TextButton(onPressed: onMustDoClicked, child: const Text('选择')),
             const SizedBox(height: 48),
             const Text('美好之事'),
-            TextButton(onPressed: () => null, child: const Text('选择')),
+            TextButton(onPressed: onGoodThingClicked, child: const Text('选择')),
             const SizedBox(height: 48),
             ElevatedButton(onPressed: () => null, child: const Text('待做事项'))
           ],
