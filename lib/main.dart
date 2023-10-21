@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:emotrack/constants.dart';
 import 'package:emotrack/db/db.dart';
+import 'package:emotrack/todo/page/todo_add_edit_page.dart';
 import 'package:emotrack/todo/page/todo_select_page.dart';
 import 'package:emotrack/utils/date_utils.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      routes: {kRouteTodoSelect: (context) => const TodoSelectPage()},
+      routes: {
+        kRouteTodoSelect: (context) => const TodoSelectPage(),
+        kRouteTodoAdd: (context) => const TodoAddEditPage()
+      },
       home: const MyHomePage(),
     );
   }

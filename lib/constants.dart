@@ -1,3 +1,4 @@
 const kAppName = 'EmoTrack';
 
-const kRouteTodoSelect = '/select_todo';
+const kRouteTodoSelect = '/todo_select';
+const kRouteTodoAdd = '/todo_add';

@@ -1,9 +1,14 @@
+import 'package:emotrack/constants.dart';
 import 'package:emotrack/db/db.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 class TodoSelectPage extends StatelessWidget {
   const TodoSelectPage({super.key});
+
+  onAddTodoClick(BuildContext context) {
+    Navigator.pushNamed(context, kRouteTodoAdd);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class TodoSelectPage extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => null,
+        onPressed: () => onAddTodoClick(context),
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
