@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:emotrack/constants.dart';
 import 'package:emotrack/db/db.dart';
+import 'package:emotrack/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -36,17 +39,50 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Timer? _timer;
+  String _strDate = '';
+  String _strTime = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer(const Duration(seconds: 1), () {
+      final now = DateTime.now();
+      setState(() {
+        _strDate = toChineseDateStr(now);
+        _strTime = toTimeStr(now);
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text(kAppName+"123"),
+        title: const Text(kAppName),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text(_strDate),
+            const SizedBox(height: 12),
+            Text(_strTime),
+            const SizedBox(height: 60),
+            const Text('必做之事'),
+            TextButton(onPressed: () => null, child: const Text('选择')),
+            const SizedBox(height: 48),
+            const Text('美好之事'),
+            TextButton(onPressed: () => null, child: const Text('选择')),
+            const SizedBox(height: 48),
+            ElevatedButton(onPressed: () => null, child: const Text('待做事项'))
           ],
         ),
       ),
