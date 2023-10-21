@@ -1,6 +1,8 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:emotrack/db/db.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get_it/get_it.dart';
 
 class TodoAddEditPage extends StatefulWidget {
   const TodoAddEditPage({super.key});
@@ -10,6 +12,10 @@ class TodoAddEditPage extends StatefulWidget {
 }
 
 class _TodoAddEditPageState extends State<TodoAddEditPage> {
+  static const kTitle = 'title';
+  static const kContent = 'content';
+  static const kFinish = 'finish';
+
   final _formKey = GlobalKey<FormBuilderState>();
 
   TodoData? todo;
@@ -28,16 +34,41 @@ class _TodoAddEditPageState extends State<TodoAddEditPage> {
   }
 
   onClickSave() {
+    _formKey.currentState?.saveAndValidate();
+    final value = _formKey.currentState?.value;
+    if (value == null) {
+      return;
+    }
     if (isEdit()) {
-      onUpdateTodo();
+      onUpdateTodo(value);
     } else {
-      onAddNewTodo();
+      onAddNewTodo(value);
     }
   }
 
-  onAddNewTodo() {}
+  onAddNewTodo(Map<String, dynamic> value) {
+    final todoData = TodoCompanion.insert(
+        title: value[kTitle] ?? '',
+        content: value[kContent] ?? '',
+        finish: value[kFinish] ?? false);
+    GetIt.I
+        .get<AppDatabase>()
+        .createOrUpdateTodo(todoData)
+        .then((newId) => Navigator.pop(context, newId));
+  }
 
-  onUpdateTodo() {}
+  onUpdateTodo(Map<String, dynamic> value) {
+    final todoData = TodoCompanion.insert(
+        id: drift.Value(todo!.id),
+        title: value[kTitle] ?? '',
+        content: value[kContent] ?? '',
+        finish: value[kFinish] ?? false,
+        created: drift.Value(todo!.created));
+    GetIt.I
+        .get<AppDatabase>()
+        .createOrUpdateTodo(todoData)
+        .then((newId) => Navigator.pop(context, newId));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +84,12 @@ class _TodoAddEditPageState extends State<TodoAddEditPage> {
             if (isEdit()) Text('id: ${todo?.id ?? ''}'),
             FormBuilderTextField(
                 decoration: const InputDecoration(labelText: '标题'),
-                name: 'title',
+                name: kTitle,
                 initialValue: todo?.title ?? ''),
-            FormBuilderCheckbox(name: 'finish', title: const Text('完成')),
+            FormBuilderCheckbox(name: kFinish, title: const Text('完成')),
             FormBuilderTextField(
                 decoration: const InputDecoration(labelText: '描述'),
-                name: 'content',
+                name: kContent,
                 minLines: 3,
                 maxLines: 6,
                 initialValue: todo?.content ?? ''),

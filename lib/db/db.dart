@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:drift/drift.dart';
-import 'package:emotrack/db/model/todo.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
 import 'package:drift/native.dart';
+import 'package:emotrack/db/model/todo.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 part 'db.g.dart';
 
@@ -16,6 +16,10 @@ class AppDatabase extends _$AppDatabase {
   int get schemaVersion => 1;
 
   Future<List<TodoData>> get allTodoItems => select(todo).get();
+
+  Future<int> createOrUpdateTodo(TodoCompanion todoDate) {
+    return into(todo).insertOnConflictUpdate(todoDate);
+  }
 }
 
 LazyDatabase _openConnection() {
