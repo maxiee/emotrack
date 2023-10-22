@@ -30,7 +30,9 @@ class TodoSelectPage extends StatelessWidget {
           }
           return ListView(
               children: snapshot.data!
-                  .map((e) => ListTile(title: Text(e.title)))
+                  .map((e) => ListTile(
+                      title: Text(e.title),
+                      onTap: () => Navigator.pop(context, e.id)))
                   .toList());
         },
       ),
