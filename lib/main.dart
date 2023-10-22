@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:emotrack/constants.dart';
 import 'package:emotrack/db/db.dart';
+import 'package:emotrack/emo/comp/emo_rating.dart';
 import 'package:emotrack/todo/page/todo_add_edit_page.dart';
 import 'package:emotrack/todo/page/todo_select_page.dart';
 import 'package:emotrack/utils/date_utils.dart';
@@ -105,6 +106,9 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(_strDate),
             const SizedBox(height: 12),
             Text(_strTime),
+            const SizedBox(height: 24),
+            const Text('心情'),
+            EmoRating(),
             const SizedBox(height: 60),
             const Text('必做之事'),
             mustDoTodo == null
