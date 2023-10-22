@@ -289,12 +289,225 @@ class TodoCompanion extends UpdateCompanion<TodoData> {
   }
 }
 
+class $EmoScoreTable extends EmoScore
+    with TableInfo<$EmoScoreTable, EmoScoreData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $EmoScoreTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _hourTimestampMeta =
+      const VerificationMeta('hourTimestamp');
+  @override
+  late final GeneratedColumn<DateTime> hourTimestamp =
+      GeneratedColumn<DateTime>('hour_timestamp', aliasedName, false,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: true,
+          defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  static const VerificationMeta _scoreMeta = const VerificationMeta('score');
+  @override
+  late final GeneratedColumn<int> score = GeneratedColumn<int>(
+      'score', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, hourTimestamp, score];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'emo_score';
+  @override
+  VerificationContext validateIntegrity(Insertable<EmoScoreData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('hour_timestamp')) {
+      context.handle(
+          _hourTimestampMeta,
+          hourTimestamp.isAcceptableOrUnknown(
+              data['hour_timestamp']!, _hourTimestampMeta));
+    } else if (isInserting) {
+      context.missing(_hourTimestampMeta);
+    }
+    if (data.containsKey('score')) {
+      context.handle(
+          _scoreMeta, score.isAcceptableOrUnknown(data['score']!, _scoreMeta));
+    } else if (isInserting) {
+      context.missing(_scoreMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  EmoScoreData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return EmoScoreData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      hourTimestamp: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}hour_timestamp'])!,
+      score: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}score'])!,
+    );
+  }
+
+  @override
+  $EmoScoreTable createAlias(String alias) {
+    return $EmoScoreTable(attachedDatabase, alias);
+  }
+}
+
+class EmoScoreData extends DataClass implements Insertable<EmoScoreData> {
+  final int id;
+  final DateTime hourTimestamp;
+  final int score;
+  const EmoScoreData(
+      {required this.id, required this.hourTimestamp, required this.score});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['hour_timestamp'] = Variable<DateTime>(hourTimestamp);
+    map['score'] = Variable<int>(score);
+    return map;
+  }
+
+  EmoScoreCompanion toCompanion(bool nullToAbsent) {
+    return EmoScoreCompanion(
+      id: Value(id),
+      hourTimestamp: Value(hourTimestamp),
+      score: Value(score),
+    );
+  }
+
+  factory EmoScoreData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return EmoScoreData(
+      id: serializer.fromJson<int>(json['id']),
+      hourTimestamp: serializer.fromJson<DateTime>(json['hourTimestamp']),
+      score: serializer.fromJson<int>(json['score']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'hourTimestamp': serializer.toJson<DateTime>(hourTimestamp),
+      'score': serializer.toJson<int>(score),
+    };
+  }
+
+  EmoScoreData copyWith({int? id, DateTime? hourTimestamp, int? score}) =>
+      EmoScoreData(
+        id: id ?? this.id,
+        hourTimestamp: hourTimestamp ?? this.hourTimestamp,
+        score: score ?? this.score,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('EmoScoreData(')
+          ..write('id: $id, ')
+          ..write('hourTimestamp: $hourTimestamp, ')
+          ..write('score: $score')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, hourTimestamp, score);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is EmoScoreData &&
+          other.id == this.id &&
+          other.hourTimestamp == this.hourTimestamp &&
+          other.score == this.score);
+}
+
+class EmoScoreCompanion extends UpdateCompanion<EmoScoreData> {
+  final Value<int> id;
+  final Value<DateTime> hourTimestamp;
+  final Value<int> score;
+  const EmoScoreCompanion({
+    this.id = const Value.absent(),
+    this.hourTimestamp = const Value.absent(),
+    this.score = const Value.absent(),
+  });
+  EmoScoreCompanion.insert({
+    this.id = const Value.absent(),
+    required DateTime hourTimestamp,
+    required int score,
+  })  : hourTimestamp = Value(hourTimestamp),
+        score = Value(score);
+  static Insertable<EmoScoreData> custom({
+    Expression<int>? id,
+    Expression<DateTime>? hourTimestamp,
+    Expression<int>? score,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (hourTimestamp != null) 'hour_timestamp': hourTimestamp,
+      if (score != null) 'score': score,
+    });
+  }
+
+  EmoScoreCompanion copyWith(
+      {Value<int>? id, Value<DateTime>? hourTimestamp, Value<int>? score}) {
+    return EmoScoreCompanion(
+      id: id ?? this.id,
+      hourTimestamp: hourTimestamp ?? this.hourTimestamp,
+      score: score ?? this.score,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (hourTimestamp.present) {
+      map['hour_timestamp'] = Variable<DateTime>(hourTimestamp.value);
+    }
+    if (score.present) {
+      map['score'] = Variable<int>(score.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EmoScoreCompanion(')
+          ..write('id: $id, ')
+          ..write('hourTimestamp: $hourTimestamp, ')
+          ..write('score: $score')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   late final $TodoTable todo = $TodoTable(this);
+  late final $EmoScoreTable emoScore = $EmoScoreTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [todo];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [todo, emoScore];
 }

@@ -11,11 +11,6 @@ String toTimeStr(DateTime dateTime) {
   return _timeFormat.format(dateTime);
 }
 
-int toHourTimestamp(DateTime dateTime) {
-  return DateTime(dateTime.year, dateTime.month, dateTime.day, dateTime.hour)
-      .millisecondsSinceEpoch;
-}
-
-DateTime parseHourTimestamp(int hourTimestamp) {
-  return DateTime.fromMillisecondsSinceEpoch(hourTimestamp);
+DateTime toDatetimeByHour(DateTime dateTime) {
+  return DateTime(dateTime.year, dateTime.month, dateTime.day, dateTime.hour);
 }

@@ -49,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Timer? _timer;
   String _strDate = '';
   String _strTime = '';
+  late DateTime _hourTimestamp;
 
   TodoData? mustDoTodo;
   TodoData? goodTingTodo;
@@ -56,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer(const Duration(seconds: 1), updateDatetime);
+    _timer = Timer(const Duration(seconds: 10), updateDatetime);
     updateDatetime();
   }
 
@@ -65,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _strDate = toChineseDateStr(now);
       _strTime = toTimeStr(now);
+      _hourTimestamp = toDatetimeByHour(now);
     });
   }
 
@@ -108,7 +110,10 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(_strTime),
             const SizedBox(height: 24),
             const Text('心情'),
-            EmoRating(),
+            EmoRating(
+              hourDatetime: _hourTimestamp,
+              key: ValueKey(_hourTimestamp.toIso8601String()),
+            ),
             const SizedBox(height: 60),
             const Text('必做之事'),
             mustDoTodo == null
